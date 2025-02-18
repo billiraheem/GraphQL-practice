@@ -1,0 +1,24 @@
+// is how used to fetch the reviews data, what is inside the reviews{} are the fields of each review we want to get back
+// author is a seperate entity like reviews but it is also linked to reviews
+// game is like author
+// reviews inside author is to get all the reviews associated with each author
+query ReviewsQuery {
+    reviews {
+        rating,
+        content,
+        id,
+        author {
+            name, 
+            id,
+            verified,
+            reviews{
+                rating,
+                id
+            }
+        },
+        game {
+            title,
+            platform
+        }
+    }
+}

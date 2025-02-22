@@ -32,5 +32,22 @@ export const typeDefs = `#graphql
         authors: [Author]
         author(id: ID!): Author
     }
+
+    type Mutation {
+        addGame(game: AddGameInput): Game
+        deleteGame(id:ID): [Game]
+        updateGame(id: ID, edits: EditGameInput!): Game
+    }
+
+    input AddGameInput{
+        title: String!
+        platform: [String!]!
+    }
+
+    input EditGameInput{
+        title: String
+        platform: [String!]
+    }
 `
 // a query variable is used when we want to fetch a single data and the variable is used to find the data to be fetched
+// mutations referes to any change made to data

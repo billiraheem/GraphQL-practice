@@ -7,11 +7,12 @@ import DB from './DB.js'
 // types
 import { typeDefs } from './schema.js'
 
-// has to match the query schema
+// has to match the query schema and used to fetch data
 // Game is used to access related data to the game object like reviews for the game, the parent will be the game()
-// 'parent' refers to the parent resolver in a resolver chain
+// 'parent' refers to the parent resolver in a resolver chain and when it is'nt needed a _ is used
 // 'args' is used to access the query variable
 // 'context' is an object that can be used for spying context values across all our resolvers i.e auth
+// mutations when passed the change automatically done to the data
 const resolvers = {
     Query: {
         games() {
@@ -58,6 +59,35 @@ const resolvers = {
 
         game(parent) {
             return DB.games.find((g) => g.id === parent.game_id)
+        }
+    },
+
+    Mutation: {
+        deleteGame(_, args) {
+            DB.games = DB.games.filter((g) => g.id !== args.id)
+
+            return DB.games
+        },
+
+        addGame(_, args) {
+            let game = {
+                ...args.game,
+                id: Math.floor(Math.random() * 10000).toString()
+            }
+            DB.games.push(game)
+
+            return game
+        },
+
+        updateGame(_, args) {
+            DB.games = DB.games.map((g) => {
+                if (g.id === args.id) {
+                    return {...g, ...args.edits}
+                }
+                return g
+            })
+
+            return DB.games.find((g) => g.id === args.id)
         }
     }
 }
